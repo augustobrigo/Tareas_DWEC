@@ -42,6 +42,7 @@ function inicio() {
           function accion(item, index) {
             if (item.style.backgroundColor == "red") {
               console.log(item.textContent);
+              //añadir al vector de seleccionado
             }
           }
         } else {
@@ -85,7 +86,7 @@ function jugar() {
     vectorN.forEach(accion2);
 
     function accion2(item2, index2) {
-      
+      console.log("iiiii");
       if (item.textContent == item2.textContent) {
         console.log(item.textContent);
         cont++;
