@@ -1,26 +1,32 @@
 window.onload = inicio;
 
-const NUM_COLUMNAS = 3;
+const NUM_COLUMNAS = 6;
 const NUM_CAJAS = 50;
 const CAJAS_SORTEO = 6;
 let vectorCajas = [];
 let v_numeros = [];
 let contAciertos = 0;
+const columnas = [];
+const vectorGlobal = [];
 function inicio() {
   cuerpo = document.querySelector("body");
   contenedorP = document.createElement("div");
   contenedorP.className = "container";
   cuerpo.appendChild(contenedorP);
-
-  let btnJugar = document.createElement("button");
+  contenedorB=document.createElement("div");
+  contenedorB.className = "container";
+   btnJugar = document.createElement("button");
   btnJugar.textContent = "SORTEO";
-  cuerpo.appendChild(btnJugar);
+  btnJugar.className="disabledDiv";
+  contenedorB.appendChild(btnJugar);
   btnJugar.onclick = jugar;
 
-  let btnReset = document.createElement("button");
+   btnReset = document.createElement("button");
   btnReset.textContent = "RESETEAR";
-  cuerpo.appendChild(btnReset);
+  contenedorB.appendChild(btnReset);
   btnReset.onclick = reset;
+  cuerpo.appendChild(contenedorB);
+//nuevo 
 
   for (let i = 0; i < NUM_COLUMNAS; i++) {
     contenedorS = document.createElement("fieldset");
@@ -31,10 +37,13 @@ function inicio() {
     contenedorS.appendChild(leyenda);
     contenedorP.appendChild(contenedorS);
     let contRojos = 0;
-
+    columnas.push(contenedorS);
+    if (i != 0) {
+      contenedorS.classList.add("disabledDiv");
+    }
     for (let x = 0; x < NUM_CAJAS; x++) {
       let caja = document.createElement("div");
-      caja.className = "gallery div";
+      
       caja.textContent = x + 1;
 
       contenedorS.appendChild(caja);
@@ -42,24 +51,9 @@ function inicio() {
       caja.onclick = marcar;
 
       function marcar() {
-        // if (contRojos == 6) {
-        // //   vectorCajas.forEach(accion);
-
-        // //   function accion(item, index) {
-        // //     if (item.style.backgroundColor == "red") {
-        // //       console.log(item.textContent);
-        // //       item.style.backgroundColor = "green";
-        // //       v_numeros.slice(contRojos,1);
-        // //     }
-        //  // }
-        // } else {
-        //     vectorCajas.push(caja);
-        //     console.log("Soy X "+x);
-        //     v_numeros.push(x+1);
-        //   caja.style.backgroundColor = "red";
-        //   contRojos++;
-        // }
-        if (v_numeros.length < 6 && !v_numeros.includes(x + 1)) {
+      
+        if (v_numeros.length < 6 ) {
+          if ( !v_numeros.includes(x + 1)){
           console.log("Entro en marcar");
           vectorCajas.push(caja);
           console.log("Soy X " + (x + 1));
@@ -67,44 +61,39 @@ function inicio() {
           caja.style.backgroundColor = "red";
           // caja.onclick = desmarcar;
           contRojos++;
-        }
-      }
-
-      function desmarcar() {
-        console.log("Entro en desmarcar");
-
-        // vectorCajas.forEach(accion);
-
-        // function accion(item, index) {
-        //   console.log("Entro en desmarcar bucle");
-        //   if (item.style.backgroundColor == "red") {
-        //     console.log("ITEM " + item.textContent);
-        //     item.style.backgroundColor = "green";
-        //     let n = parseInt(item.textContent);
-        //     let posicion = v_numeros.indexOf(n);
-        //     console.log("Posicion: " + posicion);
-        //     v_numeros.slice(posicion, 1);
-        //     contRojos--;
-        //     caja.onclick = marcar;
-        //   }
-        // }
-        if (caja.style.backgroundColor == "red") {
-          console.log("ITEM " + caja.textContent);
+          if (contRojos==6){  
+             columnas[i].classList.add("disabledDiv"); 
+             vectorGlobal.push(v_numeros);
+             contRojos=0;
+             v_numeros=[];
+             if (i==(NUM_COLUMNAS-1)){
+              console.log("entro en abrir btnJugar")
+              btnJugar.classList.remove("disabledDiv")
+             }else
+             {
+              columnas[i+1].classList.remove("disabledDiv");
+             }
+            }
+        }else{
+          console.log("Entro en desmarcar");
           caja.style.backgroundColor = "green";
           let n = parseInt(caja.textContent);
-          let posicion = v_numeros.indexOf(n);
+           let posicion = v_numeros.indexOf(n);
           console.log("Posicion: " + posicion);
-          v_numeros.splice(posicion, 1);
-          contRojos--;
+           v_numeros.splice(posicion, 1);
+           contRojos--;
         }
-        caja.onclick = marcar;
       }
+      }
+
+      
     }
   }
 }
 
 function jugar() {
-  //btnJugar.disabled = true;
+  btnJugar.className="disabledDiv"
+  btnReset.className="disabledDiv"
   let contenedorSorteo = document.createElement("div");
   contenedorSorteo.className = "gallery2";
   cuerpo.appendChild(contenedorSorteo);
@@ -123,69 +112,84 @@ function jugar() {
     box.textContent = num;
     contenedorSorteo.appendChild(box);
   }
+  let box = document.createElement("div");
+  box.className = "gallery2 div";
+  box.innerHTML = "Sorteo Ganador <br>  Aciertos";
+  contenedorSorteo.appendChild(box);
 
   //vectorCajas.forEach(recorrido);
+  
+  for(let col=0;col<6;col++){
+   
+    contAciertos=0;
+    
+    for (let num=0;num<6;num++){
+      if(vectorN.includes(vectorGlobal[col][num])){
+        contAciertos++;
+      }
+    }
+    //mostrar combinación
+    let contenedorBombo = document.createElement("div");
+  contenedorBombo.className = "gallery2";
+  cuerpo.appendChild(contenedorBombo);
+
+  for (let i = 0; i < 6; i++) {
+    let box = document.createElement("div");
+    box.className = "gallery2 div";
+    box.textContent = vectorGlobal[col][i];
+    box.style.backgroundColor = "yellow";
+    contenedorSorteo.appendChild(box);
+    if (vectorN.includes(vectorGlobal[col][i])) {
+           box.style.backgroundColor = "red";
+         }
+  }
   let resultado = document.createElement("div");
   resultado.className = "gallery2 div";
   resultado.style.backgroundColor = "rgb(0,160,0)";
   contenedorSorteo.appendChild(resultado);
-  console.log(v_numeros);
-  console.log(vectorN);
-  for (let i = 0; i < 6; i++) {
-    for (let j = 0; j < 6; j++) {
-      if (v_numeros[i] == vectorN[j]) {
-        contAciertos++;
-      }
-    }
-  }
-  //   function recorrido(item, index) {
-
-  //     vectorN.forEach(accion2);
-
-  //     function accion2(item2, index2) {
-
-  //       if (item.textContent == item2.textContent) {
-  //         console.log(item.textContent);
-  //         contAciertos++;
-
-  //       }
-
-  //     //  resultado.textContent = cont;
-  //     }
-
-  //   }
   resultado.textContent = contAciertos;
+  // let resultado = document.createElement("div");
+  // resultado.className = "gallery2 div";
+  // resultado.style.backgroundColor = "rgb(0,160,0)";
+  // contenedorSorteo.appendChild(resultado);
+  // console.log(v_numeros);
+  // console.log(vectorN);
+  // for (let i = 0; i < 6; i++) {
+  //   for (let j = 0; j < 6; j++) {
+  //     if (v_numeros[i] == vectorN[j]) {
+  //       contAciertos++;
+  //     }
+  //   }
+  // }
+  
+  // resultado.textContent = contAciertos;
 
   // --------------------------
 
-  let contenedorBombo = document.createElement("div");
-  contenedorBombo.className = "gallery2";
-  cuerpo.appendChild(contenedorBombo);
+  // let contenedorBombo = document.createElement("div");
+  // contenedorBombo.className = "gallery2";
+  // cuerpo.appendChild(contenedorBombo);
 
-  for (let i = 0; i < v_numeros.length; i++) {
-    let box = document.createElement("div");
-    box.className = "gallery2 div";
-    box.textContent = v_numeros[i];
-    box.style.backgroundColor = "yellow";
-    contenedorBombo.appendChild(box);
+  // for (let i = 0; i < v_numeros.length; i++) {
+  //   let box = document.createElement("div");
+  //   box.className = "gallery2 div";
+  //   box.textContent = v_numeros[i];
+  //   box.style.backgroundColor = "yellow";
+  //   contenedorBombo.appendChild(box);
 
-    if (vectorN.includes(v_numeros[i])) {
-      box.style.backgroundColor = "red";
-    }
-  }
+  //   if (vectorN.includes(v_numeros[i])) {
+  //     box.style.backgroundColor = "red";
+  //   }
+  // }
 }
-
+}
 function reset() {
-  let resultado = prompt(
-    "Elige la columna a resetear: - 0 todo \n - 1 columna 1 \n - 2 columna 2 \n - 3 columna 3"
-  );
+ 
+    contenedorP.remove();
+    contenedorB.remove();
+    v_numeros=[];
+     vectorCajas = [];
 
-  if (resultado == 1) {
-    vectorCajas.forEach(accion1);
-
-    function accion1(item, index) {
-      item.style.backgroundColor = "green";
-    }
-    v_numeros = [];
-  }
+    inicio();
+ 
 }

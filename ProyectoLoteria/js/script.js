@@ -23,7 +23,7 @@ function inicio() {
     leyenda.textContent = "Columna " + (i + 1);
 
     contenedorS.appendChild(leyenda);
-    contenedorP.appendChild(contenedorS);
+    contenedorP.appendChild(contenedorS);camacho
     let cont = 0;
     for (let x = 0; x < NUM_CAJAS; x++) {
       let caja = document.createElement("div");
